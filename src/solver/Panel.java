@@ -3,10 +3,11 @@ package solver;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.TreeSet;
 
 import javax.swing.JPanel;
@@ -58,7 +59,7 @@ public class Panel extends JPanel implements MouseInputListener, KeyListener {
 		
 		try {
 			createDictionary();
-		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
@@ -83,15 +84,16 @@ public class Panel extends JPanel implements MouseInputListener, KeyListener {
 		
 	}
 	
-	private void createDictionary() throws FileNotFoundException {
-		Scanner in = new Scanner(new File("Resources\\dictionary-" + DICTIONARY_NAME + ".txt"));
-		ArrayList<String> temp = new ArrayList<String>();
-		while(in.hasNext()) {
-			temp.add(in.nextLine());
+	private void createDictionary() throws IOException {
+		String[] a = new String[0];
+		ArrayList<String> words = new ArrayList<String>();
+		InputStream in = getClass().getResourceAsStream("/dictionary-wordbrain.txt");
+		BufferedReader br = new BufferedReader(new InputStreamReader(in));
+		while(br.ready()) {
+			words.add(br.readLine());
 		}
-		in.close();
-		String[] a = new String[temp.size()];
-		finder = new WordFinder(temp.toArray(a));
+		String[] b = words.toArray(a);
+		finder = new WordFinder(b);
 	}
 	
 	private void setup(int size) {
